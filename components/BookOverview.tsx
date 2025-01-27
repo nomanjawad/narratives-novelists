@@ -1,4 +1,6 @@
-import { FaRegStar } from "react-icons/fa6";
+import { FaBook, FaRegStar } from "react-icons/fa6";
+import { Button } from "./ui/button";
+import BookCover from "./BookCover";
 
 const BookOverview = ({
   title,
@@ -7,7 +9,7 @@ const BookOverview = ({
   rating,
   total_copies,
   avaiable_copies,
-  discription,
+  description,
   color,
   cover,
 }: Book) => {
@@ -37,7 +39,27 @@ const BookOverview = ({
             Avaiable Books: <span>{avaiable_copies}</span>
           </p>
         </div>
-        <p className="book-description">{discription}</p>
+        <p className="book-description">{description}</p>
+        <Button className="book-overview_btn">
+          <FaBook />{" "}
+          <p className="font-bebas-neue text-xl text-dark-100 uppercase">
+            Borrow
+          </p>
+        </Button>
+
+        <div className="relative flex flex-1 jsutify-center">
+          <div className="relative">
+            <BookCover
+              variant="wide"
+              className="z-10"
+              coverColor={color}
+              coverUrl={cover}
+            />
+            <div className="absolute left-16 top-10 rotate-12 opacity-40 max-sm:hidden">
+              <BookCover variant="wide" coverColor={color} coverUrl={cover} />
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

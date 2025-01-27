@@ -6,10 +6,12 @@ interface Book {
   rating: number;
   total_copies: number;
   avaiable_copies: number;
-  discription: string;
+  description: string;
   color: string;
   cover: string;
   video: string;
   summary: string;
   isLonedBook?: boolean;
 }
+
+type BookCoverVariant = "extraSmall" | "small" | "medium" | "regular" | "wide";
