@@ -6,7 +6,7 @@
 
 @theme {
   --font-ibm-plex-sans: IBM Plex Sans, sans-serif;
-  --font-bebas-neue: var(--bebas-neue);
+  --font-bebas-neue: var(--bebas-neue), sans-serif;
 
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
