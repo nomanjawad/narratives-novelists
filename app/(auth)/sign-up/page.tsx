@@ -11,9 +11,9 @@ const page = () => {
       defaultValues={{
         email: "",
         password: "",
-        fullname: "",
-        university_id: 0,
-        university_card: "",
+        fullName: "",
+        universityId: 0,
+        universityCard: "",
       }}
       onSubmit={async (data) => {
         console.log(data);
