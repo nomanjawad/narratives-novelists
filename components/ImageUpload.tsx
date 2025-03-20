@@ -3,7 +3,15 @@ import config from "@/lib/config";
 import { IKImage, ImageKitProvider, IKUpload } from "imagekitio-next";
 import { useRef, useState } from "react";
 import { FaFileUpload } from "react-icons/fa";
+import { toast } from "sonner";
+import ImageKit from "imagekit";
 
+const {
+  env: {
+    imagekit: { publicKey, urlEndpoint },
+  },
+} = config;
+const imageKit = new ImageKit({ publicKey, urlEndpoint });
 const authenticator = async () => {
   try {
     const response = await fetch(`${config.env.apiEndPoint}/api/auth/imagekit`);
@@ -21,12 +29,29 @@ const authenticator = async () => {
   }
 };
 
-const ImageUpload = () => {
+const ImageUpload = ({
+  onFileChange,
+}: {
+  onFileChange: (filePath: string) => void;
+}) => {
   const ikUploadRef = useRef(null);
-  const [field, setField] = useState<{ filepath: string }>(null);
+  const [file, setFile] = useState<{ filePath: string } | null>(null);
 
-    const onError = ()={}
-    const onSuccess = ()={}
+  const onError = (error: any) => {
+    console.error("File upload error:", error);
+    toast.error("File upload failed", {
+      description: "Please try again later.",
+    });
+  };
+
+  const onSuccess = (res: any) => {
+    setFile(res);
+    onFileChange(res.filePath);
+
+    toast.success("File uploaded successfully", {
+      description: "You can now use this file in your application.",
+    });
+  };
 
   return (
     <ImageKitProvider
@@ -34,16 +59,39 @@ const ImageUpload = () => {
       urlEndpoint={config.env.imagekit.urlEndpoint}
       authenticator={authenticator}
     >
-      <IKUpload className="hidden" ref={ikUploadRef} onError={onError} onSuccess={onSuccess} fileName="Test-Upload.png"/>
-      <button className="upload-btn">
-            <FaFileUpload fontSize={20}/>
-            <p className="text-base text-light-100">Upload A File</p>
-            {File && <p className="upload-filename">{File.filePath}</p>}
-      </button>
-      {file && 
-        <IKImage alt={File.filepath} path={filePath}/>
-        <IKImage alt={File.filepath} path={filePath}/>
-      }
+      <IKUpload
+        className="hidden"
+        ref={ikUploadRef}
+        onError={onError}
+        onSuccess={onSuccess}
+        fileName="uploaded-file.png"
+      />
+      <div className="upload-container">
+        <button
+          className="upload-btn bg-gray-800"
+          onClick={(e) => {
+            e.preventDefault();
+            if (ikUploadRef.current) {
+              // @ts-ignore
+              ikUploadRef.current?.click();
+            }
+          }}
+        >
+          <FaFileUpload fontSize={20} />
+          <p className="text-base text-light-100">Upload A File</p>
+        </button>
+        {file && <p className="upload-filename">{file.filePath}</p>}
+      </div>
+      {file && (
+        <div className="image-preview mt-4">
+          <IKImage
+            alt={file.filePath}
+            path={file.filePath}
+            width={500}
+            height={500}
+          />
+        </div>
+      )}
     </ImageKitProvider>
   );
 };
