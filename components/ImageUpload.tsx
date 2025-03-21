@@ -4,17 +4,16 @@ import { IKImage, ImageKitProvider, IKUpload } from "imagekitio-next";
 import { useRef, useState } from "react";
 import { FaFileUpload } from "react-icons/fa";
 import { toast } from "sonner";
-import ImageKit from "imagekit";
 
 const {
   env: {
     imagekit: { publicKey, urlEndpoint },
   },
 } = config;
-const imageKit = new ImageKit({ publicKey, urlEndpoint });
+
 const authenticator = async () => {
   try {
-    const response = await fetch(`${config.env.apiEndPoint}/api/auth/imagekit`);
+    const response = await fetch(`/api/auth/imagekit`);
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(
@@ -88,7 +87,7 @@ const ImageUpload = ({
             alt={file.filePath}
             path={file.filePath}
             width={500}
-            height={500}
+            height={300}
           />
         </div>
       )}
