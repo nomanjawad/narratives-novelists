@@ -1,5 +1,6 @@
 "use client";
 import AuthForm from "@/components/AuthForm";
+import { signInWithCredentials } from "@/lib/actions/auth";
 import { signInSchema } from "@/lib/validation";
 import React from "react";
 
@@ -13,8 +14,9 @@ const page = () => {
         password: "",
       }}
       onSubmit={async (data) => {
-        console.log(data);
-        return { success: true };
+        const result = await signInWithCredentials(data);
+        if (!result) return { success: false, error: "Unknown error" };
+        return { success: result.success, error: result.message };
       }}
     />
   );
